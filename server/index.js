@@ -12,6 +12,7 @@ module.exports = function(server){
 
     getData();
 
+
     setInterval(function(){
         getData();
     },1000*60*10);
@@ -80,7 +81,9 @@ module.exports = function(server){
         c.queue([{
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
-                $('body').find('.type01').children().each(function(){
+                var templateList = [];
+                var count = 0;
+                $('body').find('.type01').children().each(function(idx){
                     var $title =  $(this).find('._sp_each_title');
                     var title = $title.text();
                     var link = $title.attr('href');
@@ -96,18 +99,33 @@ module.exports = function(server){
                         desc : desc
                     };
 
-
-                    translate(encodeURIComponent(title + 'mayTimeSplit' + time),function(titleReault){
-                        var titleResults = titleReault.split('mayTimeSplit');
-                        template.transTitle = titleResults[0];
-                        template.transTime = titleResults[1];
-                        translate(encodeURIComponent(desc),function(descResult){
-                            template.transDesc = descResult;
-                            list.push(template);
-                        })
-                    });
+                    templateList.push(template);
 
                 });
+
+                //迭代
+                function translateGroup(){
+                    if(count === templateList.length){
+                        //翻译结束
+                        list = templateList;
+                        return
+                    }
+                    var curObj =  templateList[count];
+                    translate(encodeURIComponent(curObj.title + 'mayTimeSplit' + curObj.time),function(titleReault){
+                        var titleResults = titleReault.split('mayTimeSplit');
+                        templateList[count].transTitle = titleResults[0];
+                        templateList[count].transTime = titleResults[1];
+                        translate(encodeURIComponent(curObj.desc),function(descResult){
+                            templateList[count].transDesc = descResult;
+                            count++;
+                            translateGroup();
+                        })
+                    })
+                }
+
+                translateGroup();
+
+
             }
         }]);
     }
@@ -139,6 +157,23 @@ module.exports = function(server){
 
         return year + "/" + month + "/" + day + " " + hour + ":" + min + ":" + sec;
 
+    }
+
+    function sortList(lists){
+        var temp;
+
+        for(var i=0;i<lists.length;i++){ //比较多少趟，从第一趟开始
+
+            for(var j=0;j<lists.length-i-1;j++){ //每一趟比较多少次数
+
+                if(lists[j].index>lists[j+1].index){
+                    temp=lists[j];
+                    lists[j]=lists[j+1];
+                    lists[j+1]=temp;
+                }
+            }
+        }
+        return lists;
     }
 
 };

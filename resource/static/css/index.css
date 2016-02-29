@@ -1,6 +1,6 @@
 /* line 1, ../sass/main.scss */
 .ui-page {
-  background-color: #ffcccc;
+  background-color: rgba(255, 209, 220, 0.5);
 }
 
 /* line 4, ../sass/main.scss */
@@ -8,6 +8,12 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+/* line 9, ../sass/main.scss */
+.header-wrap {
+  height: 50px;
+  line-height: 50px;
 }
 
 /* line 3, ../sass/index.scss */

@@ -4,41 +4,6 @@
 
 'use strict';
 
-/*var Crawler = require("crawler");
-var url = require('url');
-
-var c = new Crawler({
-    maxConnections : 10,
-    // This will be called for each crawled page
-    callback : function (error, result, $) {
-        // $ is Cheerio by default
-        //a lean implementation of core jQuery designed specifically for the server
-        $('body').find('.type01').children().each(function(){
-            var $title =  $(this).find('._sp_each_title');
-            var title = $title.text();
-            var link = $title.attr('href');
-            var imgSrc = $(this).find('.thumb').find('img').attr('src');
-            var source = $(this).find('._sp_each_source').text();
-            var desc = $(this).find('dl').children().eq(2).text();
-
-              console.log(title);
-             console.log(link);
-             console.log(imgSrc);
-             console.log(source);
-             console.log(desc);
-             console.log('-----------------------');
-
-        });
-
-    }
-});
-
-// Queue just one URL, with default callback
-c.queue('https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0');*/
-
-
-
-
 const Hapi = require('hapi');
 const Good = require('good'); //打印log
 const Vision = require('vision');
