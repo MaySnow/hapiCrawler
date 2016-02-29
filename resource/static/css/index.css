@@ -1,0 +1,49 @@
+/* line 1, ../sass/main.scss */
+.ui-page {
+  background-color: #ffcccc;
+}
+
+/* line 4, ../sass/main.scss */
+.ui-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* line 3, ../sass/index.scss */
+.article-list {
+  line-height: 1.5;
+}
+/* line 6, ../sass/index.scss */
+.article-list ul li {
+  margin-bottom: 10px;
+  border-bottom: 2px solid #99cc00;
+}
+
+/* line 13, ../sass/index.scss */
+.article-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+/* line 16, ../sass/index.scss */
+.article-item .art-img-wrap {
+  min-width: 82px;
+  height: 82px;
+  margin-right: 15px;
+}
+/* line 19, ../sass/index.scss */
+.article-item .art-img-wrap a {
+  display: block;
+  border: 1px solid #ffffff;
+  text-align: center;
+  width: 100%;
+}
+/* line 26, ../sass/index.scss */
+.article-item .art-img-wrap img {
+  vertical-align: middle;
+  max-width: 100%;
+}
+/* line 33, ../sass/index.scss */
+.article-item .art-content .art-time {
+  color: #878282;
+}

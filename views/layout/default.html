@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{title}}</title>
+    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="renderer" content="webkit"/>
+    {{> base}}
+    {{{block "firstStyle"}}}
+    {{{block "stylesheet"}}}
+</head>
+<body>
+    <div class="ui-page">
+        {{> header}}
+        {{! Every view gets inserted here }}
+        {{{content}}}
+
+    </div>
+</body>
+</html>

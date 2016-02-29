@@ -1,0 +1,32 @@
+{
+  "name": "hapijs",
+  "version": "1.0.0",
+  "description": "hapijs nodejs demo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sylvinus/node-crawler.git"
+  },
+  "keywords": [
+    "hapijs"
+  ],
+  "author": "may",
+  "license": "ISC",
+  "dependencies": {
+    "code": "^2.1.0",
+    "crawler": "^0.4.3",
+    "fis-optimizer-minify-html": "^1.0.0",
+    "good": "^6.4.0",
+    "good-console": "^5.2.0",
+    "handlebars": "^4.0.5",
+    "hapi": "^11.1.2",
+    "inert": "^3.2.0",
+    "lab": "^8.0.1",
+    "vision": "^4.0.1",
+    "wreck": "^7.0.0",
+    "yar": "^5.0.1"
+  }
+}

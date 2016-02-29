@@ -1,0 +1,11 @@
+/* line 1, ../sass/main.scss */
+.ui-page {
+  background-color: #ffd1dc;
+}
+
+/* line 4, ../sass/main.scss */
+.ui-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}

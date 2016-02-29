@@ -1,0 +1,38 @@
+@import "main";
+
+.article-list {
+    line-height: 1.5;
+    ul {
+        li {
+            margin-bottom: 10px;
+            border-bottom: 2px solid #99cc00;
+        }
+    }
+}
+
+.article-item {
+    display: flex;
+    margin-bottom: 10px;
+    .art-img-wrap {
+        min-width: 82px;
+        height: 82px;
+        a {
+            display: block;
+            border: 1px solid #ffffff;
+            text-align: center;
+            width: 100%;
+        }
+
+        img {
+            vertical-align: middle;
+            max-width: 100%;
+        }
+        margin-right: 15px;
+    }
+    .art-content {
+        .art-time {
+            color: #878282;
+        }
+    }
+}
+
