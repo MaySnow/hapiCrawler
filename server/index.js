@@ -37,7 +37,7 @@ module.exports = function(server){
 
             function render(reply,list){
                 reply.view('index', {
-                    title: "bugommy's的新闻",
+                    title: "bugommy's新闻",
                     list: list
                 });
             }
