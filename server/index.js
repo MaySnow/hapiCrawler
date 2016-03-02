@@ -128,6 +128,9 @@ module.exports = function(server){
         c.queue([{
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
+                if(!$) {
+                    return;
+                }
                 var templateList = [];
                 var count = 0;
                 $('body').find('.type01').children().each(function(idx){
@@ -179,6 +182,9 @@ module.exports = function(server){
         c.queue([{
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
+                if(!$) {
+                    return;
+                }
                 let templateList = [];
                 let count = 0;
                 $('body').find('.list_info').children().each(function(idx){
