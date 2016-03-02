@@ -38,7 +38,7 @@ module.exports = function(server){
 
             function render(reply,list){
                 reply.view('index', {
-                    title: "bugommy's新闻",
+                    title: "bugommy's Naver 新闻",
                     list: list,
                     tabList : [{
                         title : 'Naver',
@@ -75,7 +75,7 @@ module.exports = function(server){
 
             function render(reply,list){
                 reply.view('pages/daum', {
-                    title: "bugommy's daum 新闻",
+                    title: "bugommy's Daum 新闻",
                     list: daumList,
                     tabList : [{
                         title : 'Naver',
