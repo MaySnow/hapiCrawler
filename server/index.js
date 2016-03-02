@@ -9,13 +9,14 @@ module.exports = function(server){
 
     var list = [];
     var count = 0;
+    var daumList = [];
 
     getData();
 
 
     setInterval(function(){
         getData();
-    },1000*60*10);
+    },1000*60*5);
 
 
     server.route({
@@ -26,7 +27,7 @@ module.exports = function(server){
             if(list.length) {
                 render(reply,list);
             } else {
-                var intervalId = setInterval(function(){
+                let intervalId = setInterval(function(){
                      if(list.length) {
                          render(reply,list);
                          clearInterval(intervalId);
@@ -38,7 +39,53 @@ module.exports = function(server){
             function render(reply,list){
                 reply.view('index', {
                     title: "bugommy's新闻",
-                    list: list
+                    list: list,
+                    tabList : [{
+                        title : 'Naver',
+                        cur : 'cur',
+                        href : '/'
+                    },{
+                        title : 'Daum',
+                        cur : '',
+                        href : '/daum'
+                    }]
+                });
+            }
+
+
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/daum',
+        handler: function (request, reply) {
+
+            if(daumList.length) {
+                render(reply,daumList);
+            } else {
+                let intervalId = setInterval(function(){
+                    if(daumList.length) {
+                        render(reply,daumList);
+                        clearInterval(intervalId);
+                    }
+                },300);
+            }
+
+
+            function render(reply,list){
+                reply.view('pages/daum', {
+                    title: "bugommy's daum 新闻",
+                    list: daumList,
+                    tabList : [{
+                        title : 'Naver',
+                        cur : '',
+                        href : '/'
+                    },{
+                        title : 'Daum',
+                        cur : 'cur',
+                        href : '/daum'
+                    }]
                 });
             }
 
@@ -128,6 +175,56 @@ module.exports = function(server){
 
             }
         }]);
+
+        c.queue([{
+            uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
+            callback : function(error, result, $){
+                let templateList = [];
+                let count = 0;
+                $('body').find('.list_info').children().each(function(idx){
+                    var $title =  $(this).find('.wrap_tit');
+                    var title = $title.text();
+                    var link = $(this).find('.info_item').attr('href');
+                    var imgSrc = $(this).find('.thumb').find('img').attr('src');
+                    var time = $(this).find('.wrap_subinfo').text();
+                    var desc = $(this).find('.desc').text();
+
+                    let template = {
+                        title : title,
+                        link : link,
+                        imgSrc : imgSrc,
+                        time : time,
+                        desc : desc
+                    };
+
+                    templateList.push(template);
+                });
+
+                //迭代
+                function translateGroup(){
+                    if(count === templateList.length){
+                        //翻译结束
+                        daumList = templateList;
+                        return
+                    }
+                    var curObj =  templateList[count];
+                    translate(encodeURIComponent(curObj.title + 'mayTimeSplit' + curObj.time),function(titleReault){
+                        var titleResults = titleReault.split('mayTimeSplit');
+                        templateList[count].transTitle = titleResults[0];
+                        templateList[count].transTime = titleResults[1];
+                        translate(encodeURIComponent(curObj.desc),function(descResult){
+                            templateList[count].transDesc = descResult;
+                            count++;
+                            translateGroup();
+                        })
+                    })
+                }
+
+                translateGroup();
+
+            }
+        }]);
+
     }
 
     /**

@@ -17,39 +17,80 @@
 }
 
 /* line 3, ../sass/index.scss */
+.tab-wrap {
+  padding-bottom: 15px;
+}
+/* line 5, ../sass/index.scss */
+.tab-wrap li {
+  float: left;
+  padding: 0 10px;
+  font-size: 16px;
+  position: relative;
+}
+/* line 10, ../sass/index.scss */
+.tab-wrap li a {
+  color: #000000;
+}
+/* line 12, ../sass/index.scss */
+.tab-wrap li a.cur {
+  color: #ff9900;
+}
+/* line 16, ../sass/index.scss */
+.tab-wrap li:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  border-right: 1px solid #000;
+}
+
+/* line 29, ../sass/index.scss */
 .article-list {
   line-height: 1.5;
 }
-/* line 6, ../sass/index.scss */
+/* line 32, ../sass/index.scss */
 .article-list ul li {
   margin-bottom: 10px;
   border-bottom: 2px solid #99cc00;
 }
 
-/* line 13, ../sass/index.scss */
+/* line 39, ../sass/index.scss */
 .article-item {
   display: flex;
   margin-bottom: 10px;
 }
-/* line 16, ../sass/index.scss */
+/* line 42, ../sass/index.scss */
 .article-item .art-img-wrap {
   min-width: 82px;
   height: 82px;
   margin-right: 15px;
 }
-/* line 19, ../sass/index.scss */
+/* line 45, ../sass/index.scss */
 .article-item .art-img-wrap a {
   display: block;
   border: 1px solid #ffffff;
   text-align: center;
   width: 100%;
 }
-/* line 26, ../sass/index.scss */
+/* line 52, ../sass/index.scss */
 .article-item .art-img-wrap img {
   vertical-align: middle;
   max-width: 100%;
 }
-/* line 33, ../sass/index.scss */
+/* line 59, ../sass/index.scss */
 .article-item .art-content .art-time {
   color: #878282;
+}
+
+/* line 66, ../sass/index.scss */
+.daum-container .art-img-wrap {
+  min-width: 120px;
+  height: 120px;
+  margin: 0 0 0 15px;
+}
+/* line 71, ../sass/index.scss */
+.daum-container .article-item {
+  min-height: 120px;
 }

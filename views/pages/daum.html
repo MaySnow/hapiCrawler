@@ -1,7 +1,7 @@
 {{#extend "stylesheet"}}
 <link rel="stylesheet" href="{{staticPath}}/static/css/index.css">
 {{/extend}}
-<div class="ui-container">
+<div class="ui-container daum-container">
     <div class="tab-wrap">
         <ul class="fn-clear">
             {{#each tabList}}
@@ -14,20 +14,19 @@
             {{#each list}}
             <li>
                 <div class="article-item fn-clear">
-                    <div class="art-img-wrap">
-                        <a href="{{link}}" target="_blank"><img src="{{imgSrc}}" alt=""></a>
-                    </div>
                     <div class="art-content">
                          <p><a href="{{link}}" target="_blank">{{{title}}}</a></p>
                         <p class="art-time">{{{time}}}</p>
                         <p>{{{desc}}}</p>
+                    </div>
+                    <div class="art-img-wrap">
+                        <a href="{{link}}" target="_blank"><img src="{{imgSrc}}" alt=""></a>
                     </div>
                 </div>
 
                 <h2>有道翻译：</h2>
 
                 <div class="article-item fn-clear">
-                    <div class="art-img-wrap"></div>
                     <div class="art-content">
                         <p><a href="{{link}}" target="_blank">{{{transTitle}}}</a></p>
                         <p class="art-time">{{{transTime}}}</p>
