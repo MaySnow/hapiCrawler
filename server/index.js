@@ -33,6 +33,16 @@ module.exports = function(server){
         href : '/dcinside/recommend/1'
     }];
 
+    const dcCraw = new Crawler({
+        maxConnections : 10,
+        // This will be called for each crawled page
+        callback : function (error, result, $) {
+
+            // $ is Cheerio by default
+            //a lean implementation of core jQuery designed specifically for the server
+        }
+    });
+
     getData();
 
 
@@ -125,19 +135,11 @@ module.exports = function(server){
                     },300);
                 }
             } else {
-                let dcCraw = new Crawler({
-                    maxConnections : 10,
-                    // This will be called for each crawled page
-                    callback : function (error, result, $) {
-
-                        // $ is Cheerio by default
-                        //a lean implementation of core jQuery designed specifically for the server
-                    }
-                });
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum,
                     callback : function(error, result, $) {
                         if (!$) {
+                            console.log(error);
                             console.log(getDateTime() + ' dcinside page'+pageNum+' 返回出错');
                         }
                         dcCommon($,'normal',function(result){
@@ -183,19 +185,11 @@ module.exports = function(server){
                     },300);
                 }
             } else {
-                let dcCraw = new Crawler({
-                    maxConnections : 10,
-                    // This will be called for each crawled page
-                    callback : function (error, result, $) {
-
-                        // $ is Cheerio by default
-                        //a lean implementation of core jQuery designed specifically for the server
-                    }
-                });
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum +'&exception_mode=recommend',
                     callback : function(error, result, $) {
                         if (!$) {
+                            console.log(error);
                             console.log(getDateTime() + ' dcinside 精华 page'+pageNum+' 返回出错');
                         }
                         dcCommon($,'recommend',function(result){
@@ -242,23 +236,12 @@ module.exports = function(server){
     function getData(){
         count++;
         console.log(getDateTime() + '  链接次数：' + count);
-        var c = new Crawler({
-            maxConnections : 10,
-            // This will be called for each crawled page
-            callback : function (error, result, $) {
-
-                // $ is Cheerio by default
-                //a lean implementation of core jQuery designed specifically for the server
-            }
-        });
-
         //naver
-        c.queue([{
+        dcCraw.queue([{
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
                 if(!$) {
                     console.log(error);
-                    console.log(result);
                     console.log(getDateTime() + ' naver 返回出错');
                 }
                 var templateList = [];
@@ -310,12 +293,11 @@ module.exports = function(server){
         }]);
 
         //daum
-        c.queue([{
+        dcCraw.queue([{
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
                 if(!$) {
                     console.log(error);
-                    console.log(result);
                     console.log(getDateTime() + ' daum 返回出错');
                 }
                 let templateList = [];
@@ -366,12 +348,11 @@ module.exports = function(server){
 
 
         //dcinside
-        c.queue([{
+        dcCraw.queue([{
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
             callback : function(error, result, $) {
                 if (!$) {
                     console.log(error);
-                    console.log(result);
                     console.log(getDateTime() + ' dcinside 返回出错');
                 }
                 dcCommon($,'normal');
@@ -379,12 +360,11 @@ module.exports = function(server){
         }]);
 
         //dcinside精华
-        c.queue([{
+        dcCraw.queue([{
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
             callback : function(error, result, $) {
                 if (!$) {
                     console.log(error);
-                    console.log(result);
                     console.log(getDateTime() + ' dcinside 精华 返回出错');
                 }
                 dcCommon($,'recommend');
