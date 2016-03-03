@@ -6,6 +6,7 @@ module.exports = function(server){
     const Wreck = require('wreck');
     const Crawler = require("crawler");
     const url = require('url');
+    const UserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36';
 
     var list = [];
     var count = 0;
@@ -35,6 +36,8 @@ module.exports = function(server){
 
     const dcCraw = new Crawler({
         maxConnections : 10,
+        rateLimits: 5000,
+        userAgent : UserAgent,
         // This will be called for each crawled page
         callback : function (error, result, $) {
 
@@ -42,13 +45,6 @@ module.exports = function(server){
             //a lean implementation of core jQuery designed specifically for the server
         }
     });
-
-    getData();
-
-
-    setInterval(function(){
-        getData();
-    },1000*60*5);
 
 
     server.route({
@@ -138,7 +134,7 @@ module.exports = function(server){
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum,
                     callback : function(error, result, $) {
-                        if (!$) {
+                        if (error || !$) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside page'+pageNum+' 返回出错');
                             return
@@ -189,7 +185,7 @@ module.exports = function(server){
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum +'&exception_mode=recommend',
                     callback : function(error, result, $) {
-                        if (error) {
+                        if (error || !$) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside 精华 page'+pageNum+' 返回出错');
                             return
@@ -217,6 +213,13 @@ module.exports = function(server){
         }
     });
 
+
+    getData();
+
+    setInterval(function(){
+        getData();
+    },1000*60*5);
+
     /**
      * 翻译
      * @param content 翻译的内容
@@ -224,7 +227,13 @@ module.exports = function(server){
      */
     function translate(content,callback){
         Wreck.request('get', 'http://fy.iciba.com/ajax.php?a=fy&f=ko&t=zh&w=' +content,  { rejectUnauthorized: false, agent: null },(err, res) => {
+            if(err) {
+                return
+            }
             Wreck.read(res, null, (err, body) => {
+                if(err) {
+                    return
+                }
                 var result = JSON.parse(body.toString('utf8'));
 
                 callback(result.content.out);
@@ -240,9 +249,10 @@ module.exports = function(server){
         console.log(getDateTime() + '  链接次数：' + count);
         //naver
         dcCraw.queue([{
+            referer : 'https://search.naver.com',
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
-                if(error) {
+                if(error || !$) {
                     console.log(error);
                     console.log(getDateTime() + ' naver 返回出错');
                     return
@@ -298,9 +308,10 @@ module.exports = function(server){
 
         //daum
         dcCraw.queue([{
+            referer : 'https://m.search.daum.net',
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
-                if(!$) {
+                if(error || !$) {
                     console.log(error);
                     console.log(getDateTime() + ' daum 返回出错');
                     return
@@ -354,9 +365,10 @@ module.exports = function(server){
 
         //dcinside
         dcCraw.queue([{
+            //referer : 'http://gall.dcinside.com',
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
             callback : function(error, result, $) {
-                if (error) {
+                if (error || !$) {
                     console.log(error);
                     console.log(getDateTime() + ' dcinside 返回出错');
                     return
@@ -367,9 +379,10 @@ module.exports = function(server){
 
         //dcinside精华
         dcCraw.queue([{
+           // reffer : 'http://gall.dcinside.com',
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
             callback : function(error, result, $) {
-                if (error) {
+                if (error || !$) {
                     console.log(error);
                     console.log(getDateTime() + ' dcinside 精华 返回出错');
                     return
@@ -382,7 +395,6 @@ module.exports = function(server){
 
     function dcCommon($,type,callback){
         var templateList = [];
-        var count = 0;
         $('body').find('.list_thead').children().each(function(idx){
             if(idx > 0 ) {
                 var $subject =  $(this).find('.t_subject').find('a');
@@ -403,7 +415,33 @@ module.exports = function(server){
 
         });
         //迭代
-        function translateGroup(){
+
+        translate(encodeURIComponent(templateList.join('mayDcSplit')),function(subjectReault){
+            var subResults = subjectReault.split('mayDcSplit');
+            for(let i = 0; i < templateList.length; i++) {
+                templateList[i].subjectReault = subResults[i];
+            }
+
+            var pageArr =  dcTransResult($,type);
+
+            if(callback) {
+                callback({
+                    dcList : templateList,
+                    listPage : pageArr
+                });
+            } else {
+                if(type === 'recommend') {
+                    recommendDcList = templateList;
+                    recDcPage = pageArr;
+                } else {
+                    dcList = templateList;
+                    dcListPage = pageArr;
+                }
+            }
+
+        });
+
+        /*function translateGroup(){
             if(count === templateList.length){
                 //翻译结束
                 var pageArr =  dcTransResult($,type);
@@ -434,7 +472,7 @@ module.exports = function(server){
             })
         }
 
-        translateGroup();
+        translateGroup();*/
 
     }
 

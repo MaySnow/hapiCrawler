@@ -45,7 +45,7 @@ hbs.registerHelper('blockTemp', function(name, context) {
 
 //添加连接信息
 server.connection({
-    host: '120.25.78.193',
+    //host: '172.16.74.102',
     port: 3000,
     routes: {
         files: {
