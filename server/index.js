@@ -257,6 +257,8 @@ module.exports = function(server){
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
                 if(!$) {
+                    console.log(error);
+                    console.log(result);
                     console.log(getDateTime() + ' naver 返回出错');
                 }
                 var templateList = [];
@@ -312,6 +314,8 @@ module.exports = function(server){
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
                 if(!$) {
+                    console.log(error);
+                    console.log(result);
                     console.log(getDateTime() + ' daum 返回出错');
                 }
                 let templateList = [];
@@ -366,6 +370,8 @@ module.exports = function(server){
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
             callback : function(error, result, $) {
                 if (!$) {
+                    console.log(error);
+                    console.log(result);
                     console.log(getDateTime() + ' dcinside 返回出错');
                 }
                 dcCommon($,'normal');
@@ -377,7 +383,9 @@ module.exports = function(server){
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
             callback : function(error, result, $) {
                 if (!$) {
-                    console.log(getDateTime() + ' dcinside 返回出错');
+                    console.log(error);
+                    console.log(result);
+                    console.log(getDateTime() + ' dcinside 精华 返回出错');
                 }
                 dcCommon($,'recommend');
             }
