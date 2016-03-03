@@ -1,0 +1,43 @@
+{{#extend "stylesheet"}}
+<link rel="stylesheet" href="{{staticPath}}/static/css/index.css">
+{{/extend}}
+<div class="ui-container dc-container">
+    <div class="tab-wrap">
+        <ul class="fn-clear">
+            {{#each tabList}}
+            <li><a href="{{href}}" class="{{cur}}">{{title}}</a></li>
+            {{/each}}
+        </ul>
+    </div>
+    <div class="article-list">
+        <table>
+            <tr>
+                <th>编号</th>
+                <th>标题</th>
+                <th>作者</th>
+                <th>日期</th>
+                <th>点赞</th>
+                <th>点击率</th>
+            </tr>
+            {{#each list}}
+            <tr>
+                <td>{{notice}}</td>
+                <td>
+                    <p class="fn-clear"><a href="{{subjectSrc}}" class="{{iconClass}} fn-left" target="_blank">{{{subject}}}</a><a href="{{commentSrc}}" target="_blank">{{commentView}}</a></p>
+                    <p class="fn-color-gray">有道翻译：</p>
+                    <p>{{{subjectReault}}}</p>
+                </td>
+                <td>{{writerUser}}</td>
+                <td>{{date}}</td>
+                <td>{{hits}}</td>
+                <td>{{answer}}</td>
+            </tr>
+            {{/each}}
+        </table>
+        <div class="dc-page-wrap">
+            {{#each dcListPage}}
+            <a href="{{href}}" class="{{cur}}">{{text}}</a>
+            {{/each}}
+        </div>
+    </div>
+</div>

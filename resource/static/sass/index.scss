@@ -73,3 +73,79 @@
     }
 }
 
+.dc-container {
+    padding: 0;
+    .tab-wrap {
+        padding: 0 20px 15px 0;
+    }
+    .article-list {
+        table {
+            width: 100%;
+        }
+        line-height: 1.5;
+        th {
+            background-color: #99cc00;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+        }
+        td {
+            padding: 5px 5px 5px 0 ;
+            border-bottom: 1px solid #ccc;
+            .icon_notice{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_notice.png) 3px  center no-repeat;
+            }
+            .icon_txt_n{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_text.png) 1px center no-repeat;
+            }
+            .icon_pic_n{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_picture.png) 0 center no-repeat;
+            }
+            .icon_txt_b{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_text_b.png) 2px center no-repeat;
+            }
+            .icon_pic_b{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_picture_b.png) 2px center no-repeat;
+            }
+            .icon_movie{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_movie.png) 1px center no-repeat;
+            }
+            .icon_wnt{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_winnerta.png) 1px center no-repeat;
+            }
+            .icon_campus{
+                padding-left:24px;
+                background:url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_campus.png) 0px center no-repeat
+            }
+            .sec_icon{
+                padding-left: 24px;
+                background-image:url("http://nstatic.dcinside.com/dgn/gallery/images/update/sec_icon.png");
+                background-repeat:no-repeat;
+                background-position: 2px center;
+            }
+            &:last-child {
+                padding-right: 0;
+            }
+        }
+    }
+    .dc-page-wrap {
+        padding: 10px 0;
+        text-align: center;
+        a {
+            padding: 0 5px;
+            &.on {
+                color: #ff5a00;
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+
+

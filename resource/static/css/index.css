@@ -23,6 +23,11 @@
   padding-right: 5px;
 }
 
+/* line 19, ../sass/main.scss */
+.fn-color-gray {
+  color: #8f8b8c;
+}
+
 /* line 3, ../sass/index.scss */
 .tab-wrap {
   padding-bottom: 15px;
@@ -100,4 +105,97 @@
 /* line 71, ../sass/index.scss */
 .daum-container .article-item {
   min-height: 120px;
+}
+
+/* line 76, ../sass/index.scss */
+.dc-container {
+  padding: 0;
+}
+/* line 78, ../sass/index.scss */
+.dc-container .tab-wrap {
+  padding: 0 20px 15px 0;
+}
+/* line 81, ../sass/index.scss */
+.dc-container .article-list {
+  line-height: 1.5;
+}
+/* line 82, ../sass/index.scss */
+.dc-container .article-list table {
+  width: 100%;
+}
+/* line 86, ../sass/index.scss */
+.dc-container .article-list th {
+  background-color: #99cc00;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+/* line 91, ../sass/index.scss */
+.dc-container .article-list td {
+  padding: 5px 5px 5px 0;
+  border-bottom: 1px solid #ccc;
+}
+/* line 94, ../sass/index.scss */
+.dc-container .article-list td .icon_notice {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_notice.png) 3px center no-repeat;
+}
+/* line 98, ../sass/index.scss */
+.dc-container .article-list td .icon_txt_n {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_text.png) 1px center no-repeat;
+}
+/* line 102, ../sass/index.scss */
+.dc-container .article-list td .icon_pic_n {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_picture.png) 0 center no-repeat;
+}
+/* line 106, ../sass/index.scss */
+.dc-container .article-list td .icon_txt_b {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_text_b.png) 2px center no-repeat;
+}
+/* line 110, ../sass/index.scss */
+.dc-container .article-list td .icon_pic_b {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_picture_b.png) 2px center no-repeat;
+}
+/* line 114, ../sass/index.scss */
+.dc-container .article-list td .icon_movie {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_movie.png) 1px center no-repeat;
+}
+/* line 118, ../sass/index.scss */
+.dc-container .article-list td .icon_wnt {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_winnerta.png) 1px center no-repeat;
+}
+/* line 122, ../sass/index.scss */
+.dc-container .article-list td .icon_campus {
+  padding-left: 24px;
+  background: url(http://nstatic.dcinside.com/dgn/gallery/images/update/icon_campus.png) 0px center no-repeat;
+}
+/* line 126, ../sass/index.scss */
+.dc-container .article-list td .sec_icon {
+  padding-left: 24px;
+  background-image: url("http://nstatic.dcinside.com/dgn/gallery/images/update/sec_icon.png");
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+/* line 132, ../sass/index.scss */
+.dc-container .article-list td:last-child {
+  padding-right: 0;
+}
+/* line 137, ../sass/index.scss */
+.dc-container .dc-page-wrap {
+  padding: 10px 0;
+  text-align: center;
+}
+/* line 140, ../sass/index.scss */
+.dc-container .dc-page-wrap a {
+  padding: 0 5px;
+}
+/* line 142, ../sass/index.scss */
+.dc-container .dc-page-wrap a.on {
+  color: #ff5a00;
+  text-decoration: underline;
 }

@@ -10,6 +10,28 @@ module.exports = function(server){
     var list = [];
     var count = 0;
     var daumList = [];
+    var dcList = [];
+    var dcListPage = [];
+    var recommendDcList = [];
+    var recDcPage = [];
+
+    var commonTabList = [{
+        title : 'Naver',
+        cur : '',
+        href : '/'
+    },{
+        title : 'Daum',
+        cur : '',
+        href : '/daum'
+    },{
+        title : 'dcinside',
+        cur : '',
+        href : '/dcinside/1'
+    },{
+        title : 'dcinside 精华',
+        cur : '',
+        href : '/dcinside/recommend/1'
+    }];
 
     getData();
 
@@ -23,6 +45,9 @@ module.exports = function(server){
         method: 'GET',
         path: '/',
         handler: function (request, reply) {
+
+            var curTabList = JSON.parse(JSON.stringify(commonTabList));
+            curTabList[0].cur = 'cur';
 
             if(list.length) {
                 render(reply,list);
@@ -40,15 +65,7 @@ module.exports = function(server){
                 reply.view('index', {
                     title: "bugommy's Naver 新闻",
                     list: list,
-                    tabList : [{
-                        title : 'Naver',
-                        cur : 'cur',
-                        href : '/'
-                    },{
-                        title : 'Daum',
-                        cur : '',
-                        href : '/daum'
-                    }]
+                    tabList : curTabList
                 });
             }
 
@@ -60,6 +77,9 @@ module.exports = function(server){
         method: 'GET',
         path: '/daum',
         handler: function (request, reply) {
+
+            var curTabList = JSON.parse(JSON.stringify(commonTabList));
+            curTabList[1].cur = 'cur';
 
             if(daumList.length) {
                 render(reply,daumList);
@@ -73,19 +93,127 @@ module.exports = function(server){
             }
 
 
-            function render(reply,list){
+            function render(reply,daumList){
                 reply.view('pages/daum', {
                     title: "bugommy's Daum 新闻",
                     list: daumList,
-                    tabList : [{
-                        title : 'Naver',
-                        cur : '',
-                        href : '/'
-                    },{
-                        title : 'Daum',
-                        cur : 'cur',
-                        href : '/daum'
-                    }]
+                    tabList : curTabList
+                });
+            }
+
+
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/dcinside/{id}',
+        handler: function (request, reply) {
+            var pageNum = request.params.id;
+            var curTabList = JSON.parse(JSON.stringify(commonTabList));
+            curTabList[2].cur = 'cur';
+
+            if(pageNum === 1) {
+                if(dcList.length) {
+                    render(reply,dcList,dcListPage);
+                } else {
+                    let intervalId = setInterval(function(){
+                        if(dcList.length) {
+                            render(reply,dcList,dcListPage);
+                            clearInterval(intervalId);
+                        }
+                    },300);
+                }
+            } else {
+                let dcCraw = new Crawler({
+                    maxConnections : 10,
+                    // This will be called for each crawled page
+                    callback : function (error, result, $) {
+
+                        // $ is Cheerio by default
+                        //a lean implementation of core jQuery designed specifically for the server
+                    }
+                });
+                dcCraw.queue([{
+                    uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum,
+                    callback : function(error, result, $) {
+                        if (!$) {
+                            console.log(getDateTime() + ' dcinside page'+pageNum+' 返回出错');
+                        }
+                        dcCommon($,'normal',function(result){
+                            render(reply,result.dcList,result.listPage)
+                        });
+                    }
+                }]);
+            }
+
+
+
+            function render(reply,dcList,listPage){
+                reply.view('pages/dcinside', {
+                    title: "bugommy's dcinside",
+                    list: dcList,
+                    dcListPage: listPage,
+                    tabList : curTabList
+                });
+            }
+
+
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/dcinside/recommend/{id}',
+        handler: function (request, reply) {
+            var pageNum = request.params.id;
+            var curTabList = JSON.parse(JSON.stringify(commonTabList));
+            curTabList[3].cur = 'cur';
+
+
+            if(pageNum === 1) {
+                if(dcList.length) {
+                    render(reply,recommendDcList,recDcPage);
+                } else {
+                    let intervalId = setInterval(function(){
+                        if(dcList.length) {
+                            render(reply,recommendDcList,recDcPage);
+                            clearInterval(intervalId);
+                        }
+                    },300);
+                }
+            } else {
+                let dcCraw = new Crawler({
+                    maxConnections : 10,
+                    // This will be called for each crawled page
+                    callback : function (error, result, $) {
+
+                        // $ is Cheerio by default
+                        //a lean implementation of core jQuery designed specifically for the server
+                    }
+                });
+                dcCraw.queue([{
+                    uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum +'&exception_mode=recommend',
+                    callback : function(error, result, $) {
+                        if (!$) {
+                            console.log(getDateTime() + ' dcinside 精华 page'+pageNum+' 返回出错');
+                        }
+                        dcCommon($,'recommend',function(result){
+                            render(reply,result.dcList,result.listPage)
+                        });
+                    }
+                }]);
+            }
+
+
+
+
+            function render(reply,recommendDcList,listPage){
+                reply.view('pages/dcinside', {
+                    title: "bugommy's dcinside",
+                    list: recommendDcList,
+                    dcListPage: listPage,
+                    tabList : curTabList
                 });
             }
 
@@ -129,7 +257,7 @@ module.exports = function(server){
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
                 if(!$) {
-                    return;
+                    console.log(getDateTime() + ' naver 返回出错');
                 }
                 var templateList = [];
                 var count = 0;
@@ -179,11 +307,12 @@ module.exports = function(server){
             }
         }]);
 
+        //daum
         c.queue([{
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
                 if(!$) {
-                    return;
+                    console.log(getDateTime() + ' daum 返回出错');
                 }
                 let templateList = [];
                 let count = 0;
@@ -231,6 +360,111 @@ module.exports = function(server){
             }
         }]);
 
+
+        //dcinside
+        c.queue([{
+            uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
+            callback : function(error, result, $) {
+                if (!$) {
+                    console.log(getDateTime() + ' dcinside 返回出错');
+                }
+                dcCommon($,'normal');
+            }
+        }]);
+
+        //dcinside精华
+        c.queue([{
+            uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
+            callback : function(error, result, $) {
+                if (!$) {
+                    console.log(getDateTime() + ' dcinside 返回出错');
+                }
+                dcCommon($,'recommend');
+            }
+        }]);
+
+    }
+
+    function dcCommon($,type,callback){
+        var templateList = [];
+        var count = 0;
+        $('body').find('.list_thead').children().each(function(idx){
+            if(idx > 0 ) {
+                var $subject =  $(this).find('.t_subject').find('a');
+                var template = {
+                    notice : $(this).find('.t_notice').text(),
+                    subject : $subject.eq(0).text(),
+                    subjectSrc : 'http://gall.dcinside.com/' + $subject.eq(0).attr('href'),
+                    iconClass : $subject.eq(0).attr('class'),
+                    commentView : $subject.eq(1).text(),
+                    commentSrc : 'http://gall.dcinside.com/' + $subject.eq(1).attr('href'),
+                    writerUser : $(this).find('.t_writer').text(),
+                    date : $(this).find('.t_date').text(),
+                    hits : $(this).find('td').eq(4).text(),
+                    answer : $(this).find('td').eq(5).text()
+                };
+                templateList.push(template);
+            }
+
+        });
+        //迭代
+        function translateGroup(){
+            if(count === templateList.length){
+                //翻译结束
+                var pageArr =  dcTransResult($,type);
+
+                if(callback) {
+                    callback({
+                        dcList : templateList,
+                        listPage : pageArr
+                    });
+                } else {
+                   if(type === 'recommend') {
+                       recommendDcList = templateList;
+                       recDcPage = pageArr;
+                   } else {
+                       dcList = templateList;
+                       dcListPage = pageArr;
+                   }
+                }
+
+
+                return
+            }
+            var curObj =  templateList[count];
+            translate(encodeURIComponent(curObj.subject),function(subjectReault){
+                templateList[count].subjectReault = subjectReault;
+                count++;
+                translateGroup();
+            })
+        }
+
+        translateGroup();
+
+    }
+
+    function dcTransResult($,type){
+        var $dcListPage =  $('body').find("#dgn_btn_paging");
+        let tempPage = [];
+        $dcListPage.children().each(function(){
+            var curText = $(this).text();
+            if(!$(this).hasClass('on')) {
+                tempPage.push({
+                    href : (type === 'recommend' ? '/dcinside/recommend/' : '/dcinside/')  + getParamer($(this).attr('href')).page,
+                    text : curText,
+                    cur : ''
+                });
+            } else {
+                tempPage.push({
+                    href : 'javascript:;',
+                    text : curText,
+                    cur : 'on'
+                });
+            }
+
+        });
+
+        return tempPage
     }
 
     /**
@@ -277,6 +511,35 @@ module.exports = function(server){
             }
         }
         return lists;
+    }
+
+    /**
+     * 获取url参数
+     * @param url
+     * @returns {{}}
+     */
+    function getParamer(url){
+        if(url.indexOf('?') === -1) {
+            return
+        }
+        var query_string = {};
+        var paramers =  url.split('?')[1];
+        var vars = (paramers.indexOf('&') === -1 ? [paramers] : paramers.split("&"));
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = decodeURIComponent(pair[1]);
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(decodeURIComponent(pair[1]));
+            }
+        }
+        return query_string;
     }
 
 };
