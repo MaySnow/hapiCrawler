@@ -10,6 +10,9 @@
         </ul>
     </div>
     <div class="article-list">
+        {{#if isError}}
+         <p>木有链接到dc网站( ╯□╰ ) 再刷新下~</p>
+        {{else}}
         <table>
             <tr>
                 <th>编号</th>
@@ -39,5 +42,7 @@
             <a href="{{href}}" class="{{cur}}">{{text}}</a>
             {{/each}}
         </div>
+        {{/if}}
+
     </div>
 </div>

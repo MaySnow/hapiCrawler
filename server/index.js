@@ -37,7 +37,6 @@ module.exports = function(server){
     const dcCraw = new Crawler({
         maxConnections : 10,
         rateLimits: 5000,
-        userAgent : UserAgent,
         // This will be called for each crawled page
         callback : function (error, result, $) {
 
@@ -119,7 +118,7 @@ module.exports = function(server){
             var curTabList = JSON.parse(JSON.stringify(commonTabList));
             curTabList[2].cur = 'cur';
 
-            if(pageNum === 1) {
+            /*if(pageNum === 1) {
                 if(dcList.length) {
                     render(reply,dcList,dcListPage);
                 } else {
@@ -130,21 +129,27 @@ module.exports = function(server){
                         }
                     },300);
                 }
-            } else {
+            } else {*/
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum,
                     callback : function(error, result, $) {
                         if (error || !$) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside page'+pageNum+' 返回出错');
-                            return
+                            reply.view('pages/dcinside', {
+                                title: "bugommy's dcinside",
+                                isError: true,
+                                tabList : curTabList
+                            });
+                        } else {
+                            dcCommon($,'normal',function(result){
+                                render(reply,result.dcList,result.listPage)
+                            });
                         }
-                        dcCommon($,'normal',function(result){
-                            render(reply,result.dcList,result.listPage)
-                        });
+
                     }
                 }]);
-            }
+            //}
 
 
 
@@ -170,7 +175,7 @@ module.exports = function(server){
             curTabList[3].cur = 'cur';
 
 
-            if(pageNum === 1) {
+            /*if(pageNum === 1) {
                 if(dcList.length) {
                     render(reply,recommendDcList,recDcPage);
                 } else {
@@ -181,21 +186,27 @@ module.exports = function(server){
                         }
                     },300);
                 }
-            } else {
+            } else {*/
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum +'&exception_mode=recommend',
                     callback : function(error, result, $) {
                         if (error || !$) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside 精华 page'+pageNum+' 返回出错');
-                            return
+                            reply.view('pages/dcinside', {
+                                title: "bugommy's dcinside",
+                                isError: true,
+                                tabList : curTabList
+                            });
+                        } else {
+                            dcCommon($,'recommend',function(result){
+                                render(reply,result.dcList,result.listPage)
+                            });
                         }
-                        dcCommon($,'recommend',function(result){
-                            render(reply,result.dcList,result.listPage)
-                        });
+
                     }
                 }]);
-            }
+            //}
 
 
 
@@ -249,6 +260,7 @@ module.exports = function(server){
         console.log(getDateTime() + '  链接次数：' + count);
         //naver
         dcCraw.queue([{
+            userAgent : UserAgent,
             referer : 'https://search.naver.com',
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
@@ -308,6 +320,7 @@ module.exports = function(server){
 
         //daum
         dcCraw.queue([{
+            userAgent : UserAgent,
             referer : 'https://m.search.daum.net',
             uri : 'https://m.search.daum.net/search?w=news&q=%EB%B0%95%EB%B3%B4%EA%B2%80&begindate=&enddate=',
             callback : function(error, result, $){
@@ -364,7 +377,7 @@ module.exports = function(server){
 
 
         //dcinside
-        dcCraw.queue([{
+        /*dcCraw.queue([{
             //referer : 'http://gall.dcinside.com',
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
             callback : function(error, result, $) {
@@ -375,10 +388,10 @@ module.exports = function(server){
                 }
                 dcCommon($,'normal');
             }
-        }]);
+        }]);*/
 
         //dcinside精华
-        dcCraw.queue([{
+        /*dcCraw.queue([{
            // reffer : 'http://gall.dcinside.com',
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
             callback : function(error, result, $) {
@@ -389,13 +402,15 @@ module.exports = function(server){
                 }
                 dcCommon($,'recommend');
             }
-        }]);
+        }]);*/
 
     }
 
     function dcCommon($,type,callback){
         var templateList = [];
+        var subjectList = [];
         $('body').find('.list_thead').children().each(function(idx){
+
             if(idx > 0 ) {
                 var $subject =  $(this).find('.t_subject').find('a');
                 var template = {
@@ -411,12 +426,13 @@ module.exports = function(server){
                     answer : $(this).find('td').eq(5).text()
                 };
                 templateList.push(template);
+                subjectList.push(template.subject);
             }
 
         });
         //迭代
 
-        translate(encodeURIComponent(templateList.join('mayDcSplit')),function(subjectReault){
+        translate(encodeURIComponent(subjectList.join('mayDcSplit')),function(subjectReault){
             var subResults = subjectReault.split('mayDcSplit');
             for(let i = 0; i < templateList.length; i++) {
                 templateList[i].subjectReault = subResults[i];
