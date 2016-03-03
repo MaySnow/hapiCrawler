@@ -141,6 +141,7 @@ module.exports = function(server){
                         if (!$) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside page'+pageNum+' 返回出错');
+                            return
                         }
                         dcCommon($,'normal',function(result){
                             render(reply,result.dcList,result.listPage)
@@ -188,9 +189,10 @@ module.exports = function(server){
                 dcCraw.queue([{
                     uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=' + pageNum +'&exception_mode=recommend',
                     callback : function(error, result, $) {
-                        if (!$) {
+                        if (error) {
                             console.log(error);
                             console.log(getDateTime() + ' dcinside 精华 page'+pageNum+' 返回出错');
+                            return
                         }
                         dcCommon($,'recommend',function(result){
                             render(reply,result.dcList,result.listPage)
@@ -240,10 +242,12 @@ module.exports = function(server){
         dcCraw.queue([{
             uri : 'https://search.naver.com/search.naver?ie=utf8&where=news&query=%EB%B0%95%EB%B3%B4%EA%B2%80&sm=tab_tmr&frm=mr&sort=0',
             callback : function(error, result, $){
-                if(!$) {
+                if(error) {
                     console.log(error);
                     console.log(getDateTime() + ' naver 返回出错');
+                    return
                 }
+
                 var templateList = [];
                 var count = 0;
                 $('body').find('.type01').children().each(function(idx){
@@ -299,6 +303,7 @@ module.exports = function(server){
                 if(!$) {
                     console.log(error);
                     console.log(getDateTime() + ' daum 返回出错');
+                    return
                 }
                 let templateList = [];
                 let count = 0;
@@ -351,9 +356,10 @@ module.exports = function(server){
         dcCraw.queue([{
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum',
             callback : function(error, result, $) {
-                if (!$) {
+                if (error) {
                     console.log(error);
                     console.log(getDateTime() + ' dcinside 返回出错');
+                    return
                 }
                 dcCommon($,'normal');
             }
@@ -363,9 +369,10 @@ module.exports = function(server){
         dcCraw.queue([{
             uri : 'http://gall.dcinside.com/board/lists/?id=parkbogum&page=1&exception_mode=recommend',
             callback : function(error, result, $) {
-                if (!$) {
+                if (error) {
                     console.log(error);
                     console.log(getDateTime() + ' dcinside 精华 返回出错');
+                    return
                 }
                 dcCommon($,'recommend');
             }
