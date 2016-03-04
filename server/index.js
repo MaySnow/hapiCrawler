@@ -36,7 +36,6 @@ module.exports = function(server){
 
     const dcCraw = new Crawler({
         maxConnections : 10,
-        rateLimits: 5000,
         userAgent : UserAgent,
         // This will be called for each crawled page
         callback : function (error, result, $) {
